@@ -2,6 +2,7 @@ import Cocoa
 import FinderSync
 import ZipMipCore
 
+@objc(FinderSync)
 public final class FinderSync: FIFinderSync {
     public override init() {
         super.init()
