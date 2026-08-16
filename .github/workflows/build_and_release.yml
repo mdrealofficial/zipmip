@@ -1,0 +1,43 @@
+name: Build and Release ZipMip
+
+on:
+  push:
+    branches: [ main ]
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          brew install sevenzip
+
+      - name: Build and Package App
+        run: |
+          chmod +x scripts/build_app.sh
+          ./scripts/build_app.sh
+
+      - name: Create Zip Archive of App Bundle
+        run: |
+          cd build
+          ditto -c -k --sequesterRsrc --keepParent ZipMip.app ZipMip-macOS.zip
+          cd ..
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
+        with:
+          name: ZipMip Release ${{ github.ref_name }}
+          files: build/ZipMip-macOS.zip
+          draft: false
+          prerelease: false
+          generate_release_notes: true
