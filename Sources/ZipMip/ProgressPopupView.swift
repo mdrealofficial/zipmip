@@ -13,26 +13,26 @@ public struct ProgressPopupView: View {
         let percent = progress.percentage
         let isDone = progress.phase == .completed
 
-        VStack(spacing: 14) {
+        VStack(spacing: 12) {
             // Header: Icon + Title + Percent Badge
             HStack(spacing: 12) {
                 ZStack {
                     Circle()
                         .fill(isDone ? Color.green.opacity(0.2) : Color.accentColor.opacity(0.15))
-                        .frame(width: 38, height: 38)
+                        .frame(width: 36, height: 36)
 
                     Image(systemName: isDone ? "checkmark" : "archivebox.fill")
-                        .font(.system(size: 18, weight: .semibold))
+                        .font(.system(size: 16, weight: .semibold))
                         .foregroundStyle(isDone ? Color.green : Color.accentColor)
                 }
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(progress.title)
-                        .font(.headline)
+                        .font(.system(size: 14, weight: .semibold))
                         .lineLimit(1)
 
                     Text(isDone ? "Completed successfully" : progress.currentFileName)
-                        .font(.caption)
+                        .font(.system(size: 11))
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
                 }
@@ -40,8 +40,7 @@ public struct ProgressPopupView: View {
                 Spacer()
 
                 Text(isDone ? "100%" : String(format: "%.0f%%", percent * 100))
-                    .font(.title3.monospacedDigit())
-                    .fontWeight(.bold)
+                    .font(.system(size: 16, weight: .bold, design: .monospaced))
                     .foregroundStyle(isDone ? Color.green : Color.primary)
             }
 
@@ -49,8 +48,8 @@ public struct ProgressPopupView: View {
             GeometryReader { geo in
                 ZStack(alignment: .leading) {
                     Capsule()
-                        .fill(Color.secondary.opacity(0.2))
-                        .frame(height: 8)
+                        .fill(Color.secondary.opacity(0.18))
+                        .frame(height: 6)
 
                     Capsule()
                         .fill(
@@ -60,25 +59,25 @@ public struct ProgressPopupView: View {
                                 endPoint: .trailing
                             )
                         )
-                        .frame(width: max(8, geo.size.width * CGFloat(percent)), height: 8)
-                        .animation(.linear(duration: 0.2), value: percent)
+                        .frame(width: max(6, geo.size.width * CGFloat(percent)), height: 6)
+                        .animation(.linear(duration: 0.15), value: percent)
                 }
             }
-            .frame(height: 8)
+            .frame(height: 6)
 
             // Footer: Speed & Details
             HStack {
                 if !progress.formattedSpeed.isEmpty && !isDone {
                     Label(progress.formattedSpeed, systemImage: "bolt.fill")
-                        .font(.caption2.monospacedDigit())
+                        .font(.system(size: 11, design: .monospaced))
                         .foregroundStyle(.secondary)
                 } else if !isDone {
                     Text("Processing archive...")
-                        .font(.caption2)
+                        .font(.system(size: 11))
                         .foregroundStyle(.tertiary)
                 } else {
                     Text("Saved to folder")
-                        .font(.caption2)
+                        .font(.system(size: 11, weight: .medium))
                         .foregroundStyle(.green)
                 }
 
@@ -89,7 +88,7 @@ public struct ProgressPopupView: View {
                         manager.cancelCurrentTask()
                     }
                     .buttonStyle(.plain)
-                    .font(.caption)
+                    .font(.system(size: 11, weight: .medium))
                     .foregroundStyle(.secondary)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 3)
@@ -97,16 +96,13 @@ public struct ProgressPopupView: View {
                 }
             }
         }
-        .padding(18)
-        .frame(width: 380)
-        .background(
-            RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .fill(.ultraThickMaterial)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 18, style: .continuous)
-                        .stroke(Color.white.opacity(0.2), lineWidth: 1)
-                )
-                .shadow(color: .black.opacity(0.25), radius: 20, y: 10)
+        .padding(16)
+        .frame(width: 360, height: 115)
+        .background(.ultraThickMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .stroke(Color.primary.opacity(0.1), lineWidth: 1)
         )
     }
 }
