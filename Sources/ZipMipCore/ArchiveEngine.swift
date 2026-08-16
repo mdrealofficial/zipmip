@@ -62,35 +62,44 @@ public actor ArchiveEngine {
     }
 
     /// Quick extract helper for Finder right-click "Extract Here"
-    public func extractHere(archiveURL: URL) async throws {
+    public func extractHere(
+        archiveURL: URL,
+        progressHandler: (@Sendable (TaskProgress) -> Void)? = nil
+    ) async throws {
         let parentDir = archiveURL.deletingLastPathComponent()
         let config = ExtractionConfig(
             destinationFolder: parentDir,
             createSubfolder: true,
             revealInFinder: true
         )
-        try await extract(archiveURL: archiveURL, config: config)
+        try await extract(archiveURL: archiveURL, config: config, progressHandler: progressHandler)
     }
 
     /// Quick compress helper for Finder right-click "Compress to ZIP"
-    public func compressToZip(sources: [URL]) async throws {
+    public func compressToZip(
+        sources: [URL],
+        progressHandler: (@Sendable (TaskProgress) -> Void)? = nil
+    ) async throws {
         guard let first = sources.first else { return }
         let parentDir = first.deletingLastPathComponent()
         let baseName = sources.count == 1 ? first.deletingPathExtension().lastPathComponent : "Archive"
         let destURL = parentDir.appendingPathComponent("\(baseName).zip")
 
         let config = CompressionConfig(format: .zip, level: .normal)
-        try await compress(sources: sources, destination: destURL, config: config)
+        try await compress(sources: sources, destination: destURL, config: config, progressHandler: progressHandler)
     }
 
     /// Quick compress helper for Finder right-click "Compress to 7Z"
-    public func compressTo7z(sources: [URL]) async throws {
+    public func compressTo7z(
+        sources: [URL],
+        progressHandler: (@Sendable (TaskProgress) -> Void)? = nil
+    ) async throws {
         guard let first = sources.first else { return }
         let parentDir = first.deletingLastPathComponent()
         let baseName = sources.count == 1 ? first.deletingPathExtension().lastPathComponent : "Archive"
         let destURL = parentDir.appendingPathComponent("\(baseName).7z")
 
         let config = CompressionConfig(format: .sevenZip, level: .ultra)
-        try await compress(sources: sources, destination: destURL, config: config)
+        try await compress(sources: sources, destination: destURL, config: config, progressHandler: progressHandler)
     }
 }
