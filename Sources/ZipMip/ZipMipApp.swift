@@ -39,15 +39,33 @@ final class ZipMipServicesProvider: NSObject, @unchecked Sendable {
     }
 
     private func extractURLs(from pboard: NSPasteboard) -> [URL] {
-        guard let items = pboard.pasteboardItems else { return [] }
         var result: [URL] = []
-        for item in items {
-            if let string = item.string(forType: .fileURL), let url = URL(string: string) {
-                result.append(url)
-            } else if let string = item.string(forType: .string) {
-                let url = URL(fileURLWithPath: string)
-                if FileManager.default.fileExists(atPath: url.path) {
+
+        // 1. Read NSURL objects directly
+        if let urls = pboard.readObjects(forClasses: [NSURL.self], options: nil) as? [URL], !urls.isEmpty {
+            return urls
+        }
+
+        // 2. Read NSFilenamesPboardType property list
+        if let filenames = pboard.propertyList(forType: NSPasteboard.PasteboardType("NSFilenamesPboardType")) as? [String], !filenames.isEmpty {
+            for f in filenames {
+                result.append(URL(fileURLWithPath: f))
+            }
+            return result
+        }
+
+        // 3. Fallback to pasteboard items
+        if let items = pboard.pasteboardItems {
+            for item in items {
+                if let string = item.string(forType: .fileURL), let url = URL(string: string) {
                     result.append(url)
+                } else if let string = item.string(forType: .string) {
+                    let cleaned = string.trimmingCharacters(in: .whitespacesAndNewlines)
+                    let path = cleaned.hasPrefix("file://") ? (URL(string: cleaned)?.path ?? cleaned) : cleaned
+                    let url = URL(fileURLWithPath: path)
+                    if FileManager.default.fileExists(atPath: url.path) {
+                        result.append(url)
+                    }
                 }
             }
         }
