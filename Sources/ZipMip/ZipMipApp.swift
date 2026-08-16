@@ -17,24 +17,33 @@ final class ZipMipServicesProvider: NSObject, @unchecked Sendable {
     @objc func compressToZipService(_ pboard: NSPasteboard, userData: String?, error: AutoreleasingUnsafeMutablePointer<NSString?>) {
         let urls = extractURLs(from: pboard)
         guard !urls.isEmpty else { return }
-        Task {
-            try? await ArchiveEngine.shared.compressToZip(sources: urls)
+        let title = urls.count == 1 ? "Zipping \(urls[0].lastPathComponent)..." : "Zipping \(urls.count) items..."
+        Task { @MainActor in
+            ProgressPopupManager.shared.runWithProgress(title: title) { progressCallback in
+                try await ArchiveEngine.shared.compressToZip(sources: urls, progressHandler: progressCallback)
+            }
         }
     }
 
     @objc func compressTo7zService(_ pboard: NSPasteboard, userData: String?, error: AutoreleasingUnsafeMutablePointer<NSString?>) {
         let urls = extractURLs(from: pboard)
         guard !urls.isEmpty else { return }
-        Task {
-            try? await ArchiveEngine.shared.compressTo7z(sources: urls)
+        let title = urls.count == 1 ? "Compressing \(urls[0].lastPathComponent)..." : "Compressing \(urls.count) items..."
+        Task { @MainActor in
+            ProgressPopupManager.shared.runWithProgress(title: title) { progressCallback in
+                try await ArchiveEngine.shared.compressTo7z(sources: urls, progressHandler: progressCallback)
+            }
         }
     }
 
     @objc func extractHereService(_ pboard: NSPasteboard, userData: String?, error: AutoreleasingUnsafeMutablePointer<NSString?>) {
         let urls = extractURLs(from: pboard)
         guard let first = urls.first else { return }
-        Task {
-            try? await ArchiveEngine.shared.extractHere(archiveURL: first)
+        let title = "Extracting \(first.lastPathComponent)..."
+        Task { @MainActor in
+            ProgressPopupManager.shared.runWithProgress(title: title) { progressCallback in
+                try await ArchiveEngine.shared.extractHere(archiveURL: first, progressHandler: progressCallback)
+            }
         }
     }
 
@@ -98,11 +107,13 @@ public struct ZipMipApp: App {
                 }
                 .sheet(isPresented: $showingCompressSheet) {
                     CompressionSheetView(sourceURLs: compressSources) { dest, config in
-                        Task {
-                            try? await ArchiveEngine.shared.compress(
+                        let title = "Compressing to \(dest.lastPathComponent)..."
+                        ProgressPopupManager.shared.runWithProgress(title: title) { progress in
+                            try await ArchiveEngine.shared.compress(
                                 sources: compressSources,
                                 destination: dest,
-                                config: config
+                                config: config,
+                                progressHandler: progress
                             )
                         }
                     }
@@ -155,33 +166,43 @@ public struct ZipMipApp: App {
                 viewModel.loadArchive(at: url)
             }
         } else if let parsed = FinderSyncBridge.parseAction(from: url) {
-            Task {
-                switch parsed.action {
-                case .extractHere:
-                    if let first = parsed.paths.first {
-                        try? await ArchiveEngine.shared.extractHere(archiveURL: first)
+            switch parsed.action {
+            case .extractHere:
+                if let first = parsed.paths.first {
+                    let title = "Extracting \(first.lastPathComponent)..."
+                    ProgressPopupManager.shared.runWithProgress(title: title) { progress in
+                        try await ArchiveEngine.shared.extractHere(archiveURL: first, progressHandler: progress)
                     }
-                case .extractToSubfolder:
-                    if let first = parsed.paths.first {
-                        let config = ExtractionConfig(
-                            destinationFolder: first.deletingLastPathComponent(),
-                            createSubfolder: true,
-                            revealInFinder: true
-                        )
-                        try? await ArchiveEngine.shared.extract(archiveURL: first, config: config)
-                    }
-                case .extractWithPassword, .openInBrowser:
-                    if let first = parsed.paths.first {
-                        viewModel.loadArchive(at: first)
-                    }
-                case .compressToZip:
-                    try? await ArchiveEngine.shared.compressToZip(sources: parsed.paths)
-                case .compressTo7z:
-                    try? await ArchiveEngine.shared.compressTo7z(sources: parsed.paths)
-                case .compressCustom:
-                    compressSources = parsed.paths
-                    showingCompressSheet = true
                 }
+            case .extractToSubfolder:
+                if let first = parsed.paths.first {
+                    let title = "Extracting \(first.lastPathComponent)..."
+                    let config = ExtractionConfig(
+                        destinationFolder: first.deletingLastPathComponent(),
+                        createSubfolder: true,
+                        revealInFinder: true
+                    )
+                    ProgressPopupManager.shared.runWithProgress(title: title) { progress in
+                        try await ArchiveEngine.shared.extract(archiveURL: first, config: config, progressHandler: progress)
+                    }
+                }
+            case .extractWithPassword, .openInBrowser:
+                if let first = parsed.paths.first {
+                    viewModel.loadArchive(at: first)
+                }
+            case .compressToZip:
+                let title = parsed.paths.count == 1 ? "Zipping \(parsed.paths[0].lastPathComponent)..." : "Zipping \(parsed.paths.count) items..."
+                ProgressPopupManager.shared.runWithProgress(title: title) { progress in
+                    try await ArchiveEngine.shared.compressToZip(sources: parsed.paths, progressHandler: progress)
+                }
+            case .compressTo7z:
+                let title = parsed.paths.count == 1 ? "Compressing \(parsed.paths[0].lastPathComponent)..." : "Compressing \(parsed.paths.count) items..."
+                ProgressPopupManager.shared.runWithProgress(title: title) { progress in
+                    try await ArchiveEngine.shared.compressTo7z(sources: parsed.paths, progressHandler: progress)
+                }
+            case .compressCustom:
+                compressSources = parsed.paths
+                showingCompressSheet = true
             }
         }
     }
