@@ -266,7 +266,7 @@ public final class SevenZipRunner: Sendable {
             typeFlag = "7z"
         }
 
-        var arguments = ["a", "-t\(typeFlag)", "-bsp1", "-mx=\(config.level.rawValue)"]
+        var arguments = ["a", "-y", "-t\(typeFlag)", "-bsp1", "-mx=\(config.level.rawValue)"]
 
         // Multi-threading
         if config.threadCount > 0 {
@@ -309,6 +309,10 @@ public final class SevenZipRunner: Sendable {
             arguments: arguments,
             progressHandler: progressHandler
         )
+
+        #if canImport(AppKit)
+        NSWorkspace.shared.activateFileViewerSelecting([destinationURL])
+        #endif
     }
 
     /// Test archive integrity
