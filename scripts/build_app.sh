@@ -45,6 +45,7 @@ fi
 echo "⚡️ Compiling & Embedding FinderSync Extension..."
 swiftc -target arm64-apple-macosx14.0 \
   -emit-executable \
+  -Xlinker -e -Xlinker _NSExtensionMain \
   -o "$APPEX_DIR/Contents/MacOS/ZipMipFinderSync" \
   -I .build/arm64-apple-macosx/release/Modules \
   .build/arm64-apple-macosx/release/ZipMipCore.build/*.o \
@@ -55,20 +56,24 @@ swiftc -target arm64-apple-macosx14.0 \
 cp Sources/ZipMipFinderSync/Info.plist "$APPEX_DIR/Contents/Info.plist"
 chmod +x "$APPEX_DIR/Contents/MacOS/ZipMipFinderSync"
 
-# 6. Install to /Applications
+# 6. Sign bundle
+codesign --force --deep --sign - "$APP_DIR"
+
+# 7. Install to /Applications
 echo "🚚 Installing to /Applications/ZipMip.app..."
 rm -rf "/Applications/ZipMip.app"
 cp -R "$APP_DIR" "/Applications/ZipMip.app"
 
-# 7. Register Extension and Services with macOS
+# 8. Register Extension and Services with macOS
 echo "🔄 Registering Finder Extension & macOS Services..."
-pluginkit -a "/Applications/ZipMip.app/Contents/PlugIns/ZipMipFinderSync.appex" || true
-pluginkit -e use -i com.zipmip.app.findersync || true
+pluginkit -a "/Applications/ZipMip.app/Contents/PlugIns/ZipMipFinderSync.appex" 2>/dev/null || true
+pluginkit -e use -i com.zipmip.app.findersync 2>/dev/null || true
 
-/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister -f -R "/Applications/ZipMip.app" || true
+/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister -f -R "/Applications/ZipMip.app" 2>/dev/null || true
 
 # Refresh dynamic services
 /System/Library/CoreServices/pbs -flush 2>/dev/null || true
+/System/Library/CoreServices/pbs -update 2>/dev/null || true
 
 echo "✅ App bundle and Finder Extension successfully installed to /Applications/ZipMip.app"
 echo "👉 You can now right-click any file in Finder to use ZipMip!"
