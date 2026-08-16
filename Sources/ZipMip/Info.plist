@@ -42,6 +42,81 @@
         </dict>
     </array>
 
+    <!-- macOS Services (Right-click menu integration) -->
+    <key>NSServices</key>
+    <array>
+        <dict>
+            <key>NSMenuItem</key>
+            <dict>
+                <key>default</key>
+                <string>ZipMip: Compress to ZIP</string>
+            </dict>
+            <key>NSMessage</key>
+            <string>compressToZipService</string>
+            <key>NSPortName</key>
+            <string>ZipMip</string>
+            <key>NSRequiredContext</key>
+            <dict>
+                <key>NSTextContent</key>
+                <string>FilePath</string>
+            </dict>
+            <key>NSSendFileTypes</key>
+            <array>
+                <string>public.item</string>
+                <string>public.data</string>
+                <string>public.folder</string>
+            </array>
+        </dict>
+        <dict>
+            <key>NSMenuItem</key>
+            <dict>
+                <key>default</key>
+                <string>ZipMip: Compress to 7Z (Ultra)</string>
+            </dict>
+            <key>NSMessage</key>
+            <string>compressTo7zService</string>
+            <key>NSPortName</key>
+            <string>ZipMip</string>
+            <key>NSRequiredContext</key>
+            <dict>
+                <key>NSTextContent</key>
+                <string>FilePath</string>
+            </dict>
+            <key>NSSendFileTypes</key>
+            <array>
+                <string>public.item</string>
+                <string>public.data</string>
+                <string>public.folder</string>
+            </array>
+        </dict>
+        <dict>
+            <key>NSMenuItem</key>
+            <dict>
+                <key>default</key>
+                <string>ZipMip: Extract Here</string>
+            </dict>
+            <key>NSMessage</key>
+            <string>extractHereService</string>
+            <key>NSPortName</key>
+            <string>ZipMip</string>
+            <key>NSRequiredContext</key>
+            <dict>
+                <key>NSTextContent</key>
+                <string>FilePath</string>
+            </dict>
+            <key>NSSendFileTypes</key>
+            <array>
+                <string>public.item</string>
+                <string>public.data</string>
+                <string>public.archive</string>
+                <string>public.zip-archive</string>
+                <string>com.pkware.zip-archive</string>
+                <string>org.7-zip.7-zip-archive</string>
+                <string>com.rarlab.rar-archive</string>
+            </array>
+        </dict>
+    </array>
+
     <!-- Document Types / File Associations -->
     <key>CFBundleDocumentTypes</key>
     <array>
