@@ -3,10 +3,65 @@ import ZipMipCore
 
 #if canImport(AppKit)
 import AppKit
+
+final class ZipMipAppDelegate: NSObject, NSApplicationDelegate {
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        NSApplication.shared.servicesProvider = ZipMipServicesProvider.shared
+        NSUpdateDynamicServices()
+    }
+}
+
+final class ZipMipServicesProvider: NSObject, @unchecked Sendable {
+    static let shared = ZipMipServicesProvider()
+
+    @objc func compressToZipService(_ pboard: NSPasteboard, userData: String?, error: AutoreleasingUnsafeMutablePointer<NSString?>) {
+        let urls = extractURLs(from: pboard)
+        guard !urls.isEmpty else { return }
+        Task {
+            try? await ArchiveEngine.shared.compressToZip(sources: urls)
+        }
+    }
+
+    @objc func compressTo7zService(_ pboard: NSPasteboard, userData: String?, error: AutoreleasingUnsafeMutablePointer<NSString?>) {
+        let urls = extractURLs(from: pboard)
+        guard !urls.isEmpty else { return }
+        Task {
+            try? await ArchiveEngine.shared.compressTo7z(sources: urls)
+        }
+    }
+
+    @objc func extractHereService(_ pboard: NSPasteboard, userData: String?, error: AutoreleasingUnsafeMutablePointer<NSString?>) {
+        let urls = extractURLs(from: pboard)
+        guard let first = urls.first else { return }
+        Task {
+            try? await ArchiveEngine.shared.extractHere(archiveURL: first)
+        }
+    }
+
+    private func extractURLs(from pboard: NSPasteboard) -> [URL] {
+        guard let items = pboard.pasteboardItems else { return [] }
+        var result: [URL] = []
+        for item in items {
+            if let string = item.string(forType: .fileURL), let url = URL(string: string) {
+                result.append(url)
+            } else if let string = item.string(forType: .string) {
+                let url = URL(fileURLWithPath: string)
+                if FileManager.default.fileExists(atPath: url.path) {
+                    result.append(url)
+                }
+            }
+        }
+        return result
+    }
+}
 #endif
 
 @main
 public struct ZipMipApp: App {
+    #if os(macOS)
+    @NSApplicationDelegateAdaptor(ZipMipAppDelegate.self) private var appDelegate
+    #endif
+
     @StateObject private var viewModel = ArchiveBrowserViewModel()
     @State private var showingCompressSheet = false
     @State private var compressSources: [URL] = []
