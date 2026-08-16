@@ -23,24 +23,27 @@ public final class ProgressPopupManager: ObservableObject {
 
         if window == nil {
             let panel = NSPanel(
-                contentRect: NSRect(x: 0, y: 0, width: 380, height: 140),
-                styleMask: [.nonactivatingPanel, .fullSizeContentView],
+                contentRect: NSRect(x: 0, y: 0, width: 360, height: 115),
+                styleMask: [.borderless, .nonactivatingPanel],
                 backing: .buffered,
                 defer: false
             )
             panel.isFloatingPanel = true
             panel.level = .floating
-            panel.titleVisibility = .hidden
-            panel.titlebarAppearsTransparent = true
             panel.isMovableByWindowBackground = true
             panel.backgroundColor = .clear
             panel.isOpaque = false
             panel.hasShadow = true
-            panel.contentView = NSHostingView(rootView: ProgressPopupView(manager: self))
+
+            let hostingView = NSHostingView(rootView: ProgressPopupView(manager: self))
+            hostingView.wantsLayer = true
+            hostingView.layer?.backgroundColor = NSColor.clear.cgColor
+            panel.contentView = hostingView
             self.window = panel
         }
 
         window?.center()
+        window?.invalidateShadow()
         window?.orderFrontRegardless()
     }
 
@@ -57,14 +60,14 @@ public final class ProgressPopupManager: ObservableObject {
                 self?.hide()
             }
             dismissWorkItem = work
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: work)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8, execute: work)
         } else if case .failed = progress.phase {
             dismissWorkItem?.cancel()
             let work = DispatchWorkItem { [weak self] in
                 self?.hide()
             }
             dismissWorkItem = work
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.5, execute: work)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: work)
         }
     }
 
