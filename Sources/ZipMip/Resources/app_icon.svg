@@ -1,0 +1,148 @@
+<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#07302E"/>
+      <stop offset="55%" stop-color="#0E4F49"/>
+      <stop offset="100%" stop-color="#1C7A6C"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="30%" cy="18%" r="75%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.14"/>
+      <stop offset="45%" stop-color="#ffffff" stop-opacity="0.04"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="paperGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FCF6EC"/>
+      <stop offset="100%" stop-color="#EDE1CC"/>
+    </linearGradient>
+    <linearGradient id="blockGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C97A4E"/>
+      <stop offset="100%" stop-color="#7A4423"/>
+    </linearGradient>
+    <linearGradient id="toothGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E8B98C"/>
+      <stop offset="100%" stop-color="#A5623A"/>
+    </linearGradient>
+    <linearGradient id="pullGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F5CFA0"/>
+      <stop offset="100%" stop-color="#C97A4E"/>
+    </linearGradient>
+    <clipPath id="papersClip">
+      <polygon points="72,72 952,72 72,952"/>
+    </clipPath>
+    <clipPath id="blockClip">
+      <polygon points="952,72 952,952 72,952"/>
+    </clipPath>
+    <clipPath id="squircle">
+      <rect x="0" y="0" width="1024" height="1024" rx="224" ry="224"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background -->
+  <rect x="0" y="0" width="1024" height="1024" rx="224" ry="224" fill="url(#bgGrad)"/>
+  <rect x="0" y="0" width="1024" height="1024" rx="224" ry="224" fill="url(#glow)"/>
+
+  <g clip-path="url(#squircle)">
+
+    <!-- Compressed archive block (bottom-right / sealed side) -->
+    <g clip-path="url(#blockClip)">
+      <rect x="380" y="360" width="640" height="640" rx="36" fill="url(#blockGrad)"/>
+      <g stroke="#5C3018" stroke-width="7" opacity="0.5">
+        <line x1="400" y1="480" x2="990" y2="480"/>
+        <line x1="400" y1="560" x2="990" y2="560"/>
+        <line x1="400" y1="640" x2="990" y2="640"/>
+        <line x1="400" y1="720" x2="990" y2="720"/>
+        <line x1="400" y1="800" x2="990" y2="800"/>
+        <line x1="400" y1="880" x2="990" y2="880"/>
+        <line x1="400" y1="960" x2="990" y2="960"/>
+      </g>
+    </g>
+
+    <!-- Loose papers spilling out (top-left / open side) -->
+    <g clip-path="url(#papersClip)">
+      <g transform="translate(260,330) rotate(-14)">
+        <rect x="-130" y="-165" width="260" height="330" rx="16" fill="url(#paperGrad)" stroke="#D9D2BF" stroke-width="3"/>
+      </g>
+      <g transform="translate(210,255) rotate(6)">
+        <rect x="-130" y="-165" width="260" height="330" rx="16" fill="url(#paperGrad)" stroke="#D9D2BF" stroke-width="3"/>
+        <g stroke="#C7BFA8" stroke-width="7" stroke-linecap="round">
+          <line x1="-82" y1="-84" x2="72" y2="-84"/>
+          <line x1="-82" y1="-38" x2="84" y2="-38"/>
+          <line x1="-82" y1="8" x2="48" y2="8"/>
+          <line x1="-82" y1="54" x2="84" y2="54"/>
+          <line x1="-82" y1="100" x2="24" y2="100"/>
+        </g>
+      </g>
+    </g>
+
+    <!-- Zipper -->
+    <line x1="72" y1="952" x2="952" y2="72" stroke="#3a3d4d" stroke-width="10" stroke-linecap="round" opacity="0.55"/>
+    <polygon points="108.6,918.2 107.2,935.2 125.6,916.8" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="108.6,918.2 88.8,916.8 107.2,898.4" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="133.2,893.5 131.8,910.5 150.2,892.2" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="133.2,893.5 113.5,892.2 131.8,873.8" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="157.9,868.9 156.5,885.9 174.9,867.5" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="157.9,868.9 138.1,867.5 156.5,849.1" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="182.5,844.3 181.1,861.3 199.5,842.9" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="182.5,844.3 162.7,842.9 181.1,824.5" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="207.1,819.6 205.8,836.6 224.1,818.2" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="207.1,819.6 187.4,818.2 205.8,799.9" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="231.8,795.0 230.4,812.0 248.8,793.6" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="231.8,795.0 212.0,793.6 230.4,775.2" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="256.4,770.3 255.0,787.3 273.4,769.0" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="256.4,770.3 236.7,769.0 255.0,750.6" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="281.1,745.7 279.7,762.7 298.1,744.3" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="281.1,745.7 261.3,744.3 279.7,725.9" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="305.7,721.1 304.3,738.1 322.7,719.7" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="305.7,721.1 285.9,719.7 304.3,701.3" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="330.3,696.4 329.0,713.4 347.3,695.0" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="330.3,696.4 310.6,695.0 329.0,676.7" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="355.0,671.8 353.6,688.8 372.0,670.4" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="355.0,671.8 335.2,670.4 353.6,652.0" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="379.6,647.1 378.2,664.1 396.6,645.8" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="379.6,647.1 359.9,645.8 378.2,627.4" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="404.3,622.5 402.9,639.5 421.3,621.1" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="404.3,622.5 384.5,621.1 402.9,602.7" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="532.0,496.8 537.4,519.1 554.3,502.2" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="531.6,496.4 508.0,489.8 525.0,472.8" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="558.3,471.4 566.2,496.2 583.1,479.2" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="557.7,470.7 532.3,462.3 549.3,445.4" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="584.7,446.0 594.9,473.2 611.9,456.3" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="583.8,445.1 556.6,434.9 573.5,417.9" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="611.0,420.5 623.7,450.3 640.7,433.3" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="609.9,419.5 580.8,407.4 597.8,390.4" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="637.3,395.1 652.5,427.3 669.5,410.3" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="636.0,393.8 605.1,379.9 622.1,362.9" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="663.6,369.7 681.3,404.3 698.3,387.4" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="662.1,368.2 629.4,352.4 646.4,335.5" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="689.9,344.2 710.1,381.4 727.0,364.4" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="688.2,342.6 653.7,325.0 670.6,308.0" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="716.2,318.8 738.9,358.4 755.8,341.4" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="714.3,316.9 677.9,297.5 694.9,280.5" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="742.5,293.4 767.6,335.5 784.6,318.5" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="740.5,291.3 702.2,270.0 719.2,253.1" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="768.8,267.9 796.4,312.5 813.4,295.5" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="766.6,265.7 726.5,242.5 743.4,225.6" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="795.1,242.5 825.2,289.5 842.2,272.6" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="792.7,240.0 750.7,215.1 767.7,198.1" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="821.4,217.0 854.0,266.6 871.0,249.6" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="818.8,214.4 775.0,187.6 792.0,170.6" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="847.7,191.6 882.8,243.6 899.7,226.6" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="844.9,188.8 799.3,160.1 816.3,143.2" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="874.1,166.2 911.6,220.6 928.5,203.7" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="871.0,163.1 823.6,132.7 840.5,115.7" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="900.4,140.7 940.3,197.7 957.3,180.7" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+      <polygon points="897.1,137.5 847.8,105.2 864.8,88.2" fill="url(#toothGrad)" stroke="#6B3A1E" stroke-width="1.5"/>
+
+    <!-- Pull tab (signature element) -->
+    <g transform="translate(472.4,551.6) rotate(-45.0)">
+      <rect x="-34" y="-52" width="68" height="98" rx="18" fill="url(#pullGrad)" stroke="#5C3018" stroke-width="4"/>
+      <rect x="-14" y="-84" width="28" height="40" rx="10" fill="none" stroke="#5C3018" stroke-width="8"/>
+      <line x1="0" y1="-14" x2="0" y2="30" stroke="#5C3018" stroke-width="6" stroke-linecap="round"/>
+    </g>
+
+  </g>
+
+  <!-- subtle top sheen -->
+  <path d="M 224,0 L 800,0 Q 1024,0 1024,224 L 1024,300 Q 700,60 224,120 Q 90,140 0,300 L 0,224 Q 0,0 224,0 Z"
+        fill="#ffffff" opacity="0.06" clip-path="url(#squircle)"/>
+</svg>
